@@ -1,7 +1,13 @@
 import { CartItem, Coupon } from "../../types";
 
 export const calculateItemTotal = (item: CartItem) => {
-	return 0;
+	const { product, quantity } = item; // 상품 정보와 카트 수량
+	const { price } = product; // 상품 가격과 할인 정보
+
+	const discount = getMaxApplicableDiscount(item); // 최대 할인율 계산
+	const itemTotal = price * quantity; // 총 상품 가격
+	const discountedTotal = itemTotal * (1 - discount); // 할인 적용 후 총 상품 가격
+	return { itemTotal, discountedTotal };
 };
 
 export const getMaxApplicableDiscount = (item: CartItem) => {
@@ -37,10 +43,12 @@ export const calculateCartTotal = (
 
 		const discount = getMaxApplicableDiscount(item);
 
-		const itemTotal = price * quantity;
-		const discountedTotal = itemTotal * (1 - discount);
+		const itemTotal = price * quantity; // 총 상품 가격
+		const discountedTotal = itemTotal * (1 - discount); // 할인 적용 후 총 상품 가격
 
-		return { itemTotal, discountedTotal };
+		return calculateItemTotal(item);
+
+		// return { itemTotal, discountedTotal };
 	});
 
 	// Calculate total after discount
