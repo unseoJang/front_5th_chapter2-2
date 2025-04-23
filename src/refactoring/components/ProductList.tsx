@@ -1,17 +1,24 @@
-import React from "react";
-import { Product } from "../../types";
+import { Product } from "../../types"
 
 interface ProductListProps {
-	products: Product[];
+	products: Product[]
+	addToCart: (product: Product) => void
+	getRemainingStock: (product: Product) => number
+	getMaxDiscount: (discounts: { quantity: number; rate: number }[]) => number
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products }) => {
+const ProductList: React.FC<ProductListProps> = ({
+	products,
+	addToCart,
+	getRemainingStock,
+	getMaxDiscount,
+}) => {
 	return (
 		<div>
 			<h2 className="text-2xl font-semibold mb-4">상품 목록</h2>
 			<div className="space-y-2">
 				{products.map((product) => {
-					const remainingStock = getRemainingStock(product);
+					const remainingStock = getRemainingStock(product)
 					return (
 						<div
 							key={product.id}
@@ -61,11 +68,11 @@ const ProductList: React.FC<ProductListProps> = ({ products }) => {
 								{remainingStock > 0 ? "장바구니에 추가" : "품절"}
 							</button>
 						</div>
-					);
+					)
 				})}
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default ProductList;
+export default ProductList
