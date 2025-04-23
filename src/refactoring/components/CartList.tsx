@@ -1,5 +1,6 @@
 import React from "react"
 import { CartItem } from "../../types"
+import { useDiscount } from "../hooks/useDiscount"
 
 interface CartListProps {
 	cart: CartItem[]
@@ -12,32 +13,24 @@ const CartList: React.FC<CartListProps> = ({
 	updateQuantity,
 	removeFromCart,
 }) => {
-	const getAppliedDiscount = (item: CartItem) => {
-		const { discounts } = item.product
-		const { quantity } = item
-		let appliedDiscount = 0
-		for (const discount of discounts) {
-			if (quantity >= discount.quantity) {
-				appliedDiscount = Math.max(appliedDiscount, discount.rate)
-			}
-		}
-		return appliedDiscount
-	}
+	const { getAppliedDiscount } = useDiscount()
 
 	return (
 		<div className="space-y-2">
 			{cart.map((item) => {
-				const appliedDiscount = getAppliedDiscount(item)
+				const { product, quantity } = item
+				const { discounts, id, name, price } = product
+				const appliedDiscount = getAppliedDiscount(discounts, quantity)
 				return (
 					<div
 						key={item.product.id}
 						className="flex justify-between items-center bg-white p-3 rounded shadow"
 					>
 						<div>
-							<span className="font-semibold">{item.product.name}</span>
+							<span className="font-semibold">{name}</span>
 							<br />
 							<span className="text-sm text-gray-600">
-								{item.product.price.toLocaleString()}원 x {item.quantity}
+								{price.toLocaleString()}원 x {quantity}
 								{appliedDiscount > 0 && (
 									<span className="text-green-600 ml-1">
 										({(appliedDiscount * 100).toFixed(0)}% 할인 적용)
@@ -47,23 +40,19 @@ const CartList: React.FC<CartListProps> = ({
 						</div>
 						<div>
 							<button
-								onClick={() =>
-									updateQuantity(item.product.id, item.quantity - 1)
-								}
+								onClick={() => updateQuantity(id, quantity - 1)}
 								className="bg-gray-300 text-gray-800 px-2 py-1 rounded mr-1 hover:bg-gray-400"
 							>
 								-
 							</button>
 							<button
-								onClick={() =>
-									updateQuantity(item.product.id, item.quantity + 1)
-								}
+								onClick={() => updateQuantity(id, quantity + 1)}
 								className="bg-gray-300 text-gray-800 px-2 py-1 rounded mr-1 hover:bg-gray-400"
 							>
 								+
 							</button>
 							<button
-								onClick={() => removeFromCart(item.product.id)}
+								onClick={() => removeFromCart(id)}
 								className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
 							>
 								삭제

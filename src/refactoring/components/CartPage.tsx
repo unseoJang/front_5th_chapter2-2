@@ -1,5 +1,6 @@
-import { CartItem, Coupon, Product } from "../../types.ts"
+import { Coupon, Product } from "../../types.ts"
 import { useCart } from "../hooks"
+import { useDiscount } from "../hooks/useDiscount.ts"
 import CartList from "./CartList.tsx"
 import CouponSelector from "./CouponSelector.tsx"
 import OrderSummary from "./OrderSummary.tsx"
@@ -21,9 +22,7 @@ export const CartPage = ({ products, coupons }: Props) => {
 		selectedCoupon,
 	} = useCart()
 
-	const getMaxDiscount = (discounts: { quantity: number; rate: number }[]) => {
-		return discounts.reduce((max, discount) => Math.max(max, discount.rate), 0)
-	}
+	const { getMaxDiscount } = useDiscount()
 
 	const getRemainingStock = (product: Product) => {
 		const cartItem = cart.find((item) => item.product.id === product.id)
