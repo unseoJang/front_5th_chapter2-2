@@ -80,6 +80,13 @@ export const calculateCartTotal = (
 	}
 }
 
+/**
+ * Update the quantity of a cart item
+ * @param cart 
+ * @param productId 
+ * @param newQuantity 
+ * @returns 
+ */
 export const updateCartItemQuantity = (
 	cart: CartItem[],
 	productId: string,
