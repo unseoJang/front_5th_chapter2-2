@@ -1,4 +1,4 @@
-import { Coupon } from "../../types";
+import { Coupon } from "../../types"
 
 /**
  * Hook to get coupon options for a select input
@@ -20,16 +20,18 @@ export const useCouponOptions = () => {
 				(coupon.discountType === "amount"
 					? `${coupon.discountValue}원`
 					: `${coupon.discountValue}%`),
-		}));
-	};
+		}))
+	}
 
 	const getAppliedCouponText = (coupon: Coupon | null) => {
-		if (!coupon) return "";
+		if (!coupon) return ""
 		const discountText =
 			coupon.discountType === "amount"
 				? `${coupon.discountValue}원`
-				: `${coupon.discountValue}%`;
-	};
+				: `${coupon.discountValue}%`
 
-	return { getCouponOptions, getAppliedCouponText };
-};
+		return `적용된 쿠폰: ${coupon.name} (${discountText})`
+	}
+
+	return { getCouponOptions, getAppliedCouponText }
+}

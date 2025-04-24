@@ -10,13 +10,11 @@ export const useDiscount = () => {
 		discounts: Discount[],
 		quantity: number
 	): number => {
-		let appliedDiscount = 0
-		for (const discount of discounts) {
-			if (quantity >= discount.quantity) {
-				appliedDiscount = Math.max(appliedDiscount, discount.rate)
-			}
-		}
-		return appliedDiscount
+		return discounts.reduce((maxRate, discount) => {
+			return quantity >= discount.quantity
+				? Math.max(maxRate, discount.rate)
+				: maxRate
+		}, 0)
 	}
 
 	return {

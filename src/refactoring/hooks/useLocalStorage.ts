@@ -1,30 +1,35 @@
-// src/hooks/useLocalStorage.ts
-import { useState } from "react";
+import { useState, useEffect } from "react"
 
 export function useLocalStorage<T>(
 	key: string,
 	initialValue: T
-): [T, (val: T | ((prev: T) => T)) => void] {
-	const [storedValue, setStoredValue] = useState<T>(() => {
-		try {
-			const item = localStorage.getItem(key);
-			return item ? JSON.parse(item) : initialValue;
-		} catch (err) {
-			console.error("로컬스토리지 파싱 오류:", err);
-			return initialValue;
-		}
-	});
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+	const isBrowser =
+		typeof window !== "undefined" && typeof window.localStorage !== "undefined"
 
-	const setValue = (value: T | ((prev: T) => T)) => {
+	// 초기값 불러오기
+	const getStoredValue = (): T => {
+		if (!isBrowser) return initialValue
 		try {
-			const valueToStore =
-				value instanceof Function ? value(storedValue) : value;
-			setStoredValue(valueToStore);
-			localStorage.setItem(key, JSON.stringify(valueToStore));
-		} catch (err) {
-			console.error("로컬스토리지 저장 오류:", err);
+			const item = localStorage.getItem(key)
+			return item ? (JSON.parse(item) as T) : initialValue
+		} catch (error) {
+			console.warn(`Error reading localStorage key “${key}”:`, error)
+			return initialValue
 		}
-	};
+	}
 
-	return [storedValue, setValue];
+	const [storedValue, setStoredValue] = useState<T>(getStoredValue)
+
+	// 저장 시 side effect
+	useEffect(() => {
+		if (!isBrowser) return
+		try {
+			localStorage.setItem(key, JSON.stringify(storedValue))
+		} catch (error) {
+			console.warn(`Error setting localStorage key “${key}”:`, error)
+		}
+	}, [key, storedValue])
+
+	return [storedValue, setStoredValue]
 }

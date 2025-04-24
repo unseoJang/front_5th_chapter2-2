@@ -1,16 +1,16 @@
-import { useProductContext } from "../contexts/ProductContext";
-import { useCouponContext } from "../contexts/CouponContext";
-import { useCart } from "../hooks";
-import { useDiscount } from "../hooks/useDiscount";
-import CartList from "./CartList";
-import CouponSelector from "./CouponSelector";
-import OrderSummary from "./OrderSummary";
-import ProductList from "./ProductList";
-import { Product } from "../../types";
+import { useProductContext } from "../contexts/ProductContext"
+import { useCouponContext } from "../contexts/CouponContext"
+import { useCart } from "../hooks"
+import { useDiscount } from "../hooks/useDiscount"
+import CartList from "./CartList"
+import CouponSelector from "./CouponSelector"
+import OrderSummary from "./OrderSummary"
+import ProductList from "./ProductList"
+import { Product } from "../../types"
 
 export const CartPage = () => {
-	const { products } = useProductContext();
-	const { coupons } = useCouponContext();
+	const { products } = useProductContext()
+	const { coupons } = useCouponContext()
 	const {
 		cart,
 		addToCart,
@@ -19,16 +19,16 @@ export const CartPage = () => {
 		applyCoupon,
 		calculateTotal,
 		selectedCoupon,
-	} = useCart();
-	const { getMaxDiscount } = useDiscount();
+	} = useCart()
+	const { getMaxDiscount } = useDiscount()
 
 	const getRemainingStock = (product: Product): number => {
-		const cartItem = cart.find((item) => item.product.id === product.id);
-		return product.stock - (cartItem?.quantity || 0);
-	};
+		const cartItem = cart.find((item) => item.product.id === product.id)
+		return product.stock - (cartItem?.quantity || 0)
+	}
 
 	const { totalBeforeDiscount, totalAfterDiscount, totalDiscount } =
-		calculateTotal();
+		calculateTotal()
 
 	return (
 		<div className="container mx-auto p-4">
@@ -60,5 +60,5 @@ export const CartPage = () => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}

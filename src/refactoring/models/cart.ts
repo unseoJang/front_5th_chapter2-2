@@ -12,7 +12,7 @@ export const calculateItemTotal = (item: CartItem): number => {
 	const total = product.price * quantity
 	const discountedTotal = total * (1 - discount)
 
-	return discountedTotal
+	return Math.round(discountedTotal) // 안전하게 반올림 추가
 }
 
 /**
@@ -82,10 +82,10 @@ export const calculateCartTotal = (
 
 /**
  * Update the quantity of a cart item
- * @param cart 
- * @param productId 
- * @param newQuantity 
- * @returns 
+ * @param cart
+ * @param productId
+ * @param newQuantity
+ * @returns
  */
 export const updateCartItemQuantity = (
 	cart: CartItem[],
