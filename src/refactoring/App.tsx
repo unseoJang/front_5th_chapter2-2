@@ -7,6 +7,7 @@ import { CouponProvider } from "./contexts/CouponContext"
 import { fetchCoupons } from "../api/coupons.ts"
 import { fetchProducts } from "../api/product.ts"
 import { Coupon, Product } from "../types.ts"
+import { initialCoupons, initialProducts } from "../mocks/mockData.ts"
 
 const App = () => {
 	const [products, setProducts] = useState<Product[] | null>(null)
@@ -19,6 +20,7 @@ const App = () => {
 				const data = await fetchProducts()
 				setProducts(data)
 			} catch (err) {
+				setProducts(initialProducts)
 				console.error("상품 불러오기 실패", err)
 			}
 		}
@@ -28,6 +30,7 @@ const App = () => {
 				const data = await fetchCoupons()
 				setCoupons(data)
 			} catch (err) {
+				setCoupons(initialCoupons)
 				console.error("쿠폰 불러오기 실패", err)
 			}
 		}
