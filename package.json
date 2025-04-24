@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://unseojang.github.io/front_5th_chapter2-2/",
+
   "scripts": {
     "start:origin": "vite serve --open ./index.origin.html",
     "start:refactoring": "vite serve --open ./index.refactoring.html",
@@ -12,7 +14,9 @@
     "test:advanced": "vitest src/advanced",
     "test:ui": "vitest --ui",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "axios": "^1.8.4",
@@ -32,6 +36,7 @@
     "eslint": "^9.12.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.12",
+    "gh-pages": "^6.3.0",
     "jsdom": "^26.1.0",
     "msw": "^2.7.5",
     "typescript": "^5.6.3",
