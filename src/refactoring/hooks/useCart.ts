@@ -3,10 +3,19 @@ import { useState } from "react";
 import { CartItem, Coupon, Product } from "../../types";
 import { calculateCartTotal, updateCartItemQuantity } from "../models/cart";
 import { getRemainingStock } from "../../origin/utils/cart";
+import {
+	createNewCartItem,
+	findCartItem,
+	increaseCartItemQuantity,
+} from "../utils/cartItem";
+import { useLocalStorage } from "./useLocalStorage";
 
-export const useCart = () => {
+export const useCart = (products: Product[], coupons: Coupon[]) => {
 	const [cart, setCart] = useState<CartItem[]>([]);
 	const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
+
+	// const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
+	// const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
 
 	/**
 	 * 장바구니에 상품 추가 로직
@@ -17,18 +26,12 @@ export const useCart = () => {
 		const remainingStock = getRemainingStock(product, cart);
 		if (remainingStock <= 0) return;
 
-		setCart((prevCart) => {
-			const existingItem = prevCart.find(
-				(item) => item.product.id === product.id
-			);
+		setCart((prevCart: CartItem[]) => {
+			const existingItem = findCartItem(prevCart, product.id);
 			if (existingItem) {
-				return prevCart.map((item) =>
-					item.product.id === product.id
-						? { ...item, quantity: Math.min(item.quantity + 1, product.stock) }
-						: item
-				);
+				return increaseCartItemQuantity(prevCart, product.id, 1);
 			}
-			return [...prevCart, { product, quantity: 1 }];
+			return createNewCartItem(prevCart, product);
 		});
 	};
 
@@ -37,8 +40,10 @@ export const useCart = () => {
 	 * @param productId
 	 */
 	const removeFromCart = (productId: string) => {
-		setCart((prevCart) =>
-			prevCart.filter((item) => item.product.id !== productId)
+		setCart((prevCart: CartItem[]) =>
+			prevCart.filter(
+				(item: { product: { id: string } }) => item.product.id !== productId
+			)
 		);
 	};
 
@@ -48,7 +53,7 @@ export const useCart = () => {
 	 * @param newQuantity
 	 */
 	const updateQuantity = (productId: string, newQuantity: number) => {
-		setCart((prevCart) =>
+		setCart((prevCart: CartItem[]) =>
 			updateCartItemQuantity(prevCart, productId, newQuantity)
 		);
 	};
