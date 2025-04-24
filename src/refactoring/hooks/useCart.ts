@@ -3,8 +3,13 @@ import { useState } from "react";
 import { CartItem, Coupon, Product } from "../../types";
 import { calculateCartTotal, updateCartItemQuantity } from "../models/cart";
 import { getRemainingStock } from "../../origin/utils/cart";
+import {
+	createNewCartItem,
+	findCartItem,
+	increaseCartItemQuantity,
+} from "../utils/cartItem";
 
-export const useCart = () => {
+export const useCart = (p0?: { id: string; name: string; price: number; stock: number; discounts: never[]; }[], p1?: never[]) => {
 	const [cart, setCart] = useState<CartItem[]>([]);
 	const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
 
@@ -18,17 +23,11 @@ export const useCart = () => {
 		if (remainingStock <= 0) return;
 
 		setCart((prevCart) => {
-			const existingItem = prevCart.find(
-				(item) => item.product.id === product.id
-			);
+			const existingItem = findCartItem(prevCart, product.id);
 			if (existingItem) {
-				return prevCart.map((item) =>
-					item.product.id === product.id
-						? { ...item, quantity: Math.min(item.quantity + 1, product.stock) }
-						: item
-				);
+				return increaseCartItemQuantity(prevCart, product.id, 1);
 			}
-			return [...prevCart, { product, quantity: 1 }];
+			return createNewCartItem(prevCart, product);
 		});
 	};
 
