@@ -1,14 +1,14 @@
-import { Coupon, Product } from "../../types.ts"
-import { useCart } from "../hooks"
-import { useDiscount } from "../hooks/useDiscount.ts"
-import CartList from "./CartList.tsx"
-import CouponSelector from "./CouponSelector.tsx"
-import OrderSummary from "./OrderSummary.tsx"
-import ProductList from "./ProductList.tsx"
+import { Coupon, Product } from "../../types.ts";
+import { useCart } from "../hooks";
+import { useDiscount } from "../hooks/useDiscount.ts";
+import CartList from "./CartList.tsx";
+import CouponSelector from "./CouponSelector.tsx";
+import OrderSummary from "./OrderSummary.tsx";
+import ProductList from "./ProductList.tsx";
 
 interface Props {
-	products: Product[]
-	coupons: Coupon[]
+	products: Product[];
+	coupons: Coupon[];
 }
 
 export const CartPage = ({ products, coupons }: Props) => {
@@ -20,17 +20,17 @@ export const CartPage = ({ products, coupons }: Props) => {
 		applyCoupon,
 		calculateTotal,
 		selectedCoupon,
-	} = useCart()
+	} = useCart();
 
-	const { getMaxDiscount } = useDiscount()
+	const { getMaxDiscount } = useDiscount();
 
 	const getRemainingStock = (product: Product) => {
-		const cartItem = cart.find((item) => item.product.id === product.id)
-		return product.stock - (cartItem?.quantity || 0)
-	}
+		const cartItem = cart.find((item) => item.product.id === product.id);
+		return product.stock - (cartItem?.quantity || 0);
+	};
 
 	const { totalBeforeDiscount, totalAfterDiscount, totalDiscount } =
-		calculateTotal()
+		calculateTotal();
 
 	return (
 		<div className="container mx-auto p-4">
@@ -69,5 +69,5 @@ export const CartPage = ({ products, coupons }: Props) => {
 				</div>
 			</div>
 		</div>
-	)
-}
+	);
+};
