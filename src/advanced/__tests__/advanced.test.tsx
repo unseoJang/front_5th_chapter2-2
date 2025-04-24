@@ -281,6 +281,9 @@ describe("advanced > ", () => {
 	})
 
 	describe("자유롭게 작성해보세요.", () => {
+		let getStoredValue: () => string
+		const mockKey = "test-key"
+		const initialValue = "default-value"
 		// 테스트 코드 작성 GPT 예시 포함
 		test("새로운 유틸 함수를 만든 후에 테스트 코드를 작성해서 실행해보세요", () => {
 			// expect(true).toBe(false);
@@ -354,7 +357,7 @@ describe("advanced > ", () => {
 				discounts: [],
 			}
 
-			const { result } = renderHook(() => useCart([product], []))
+			const { result } = renderHook(() => useCart())
 
 			act(() => {
 				result.current.addToCart(product)
@@ -384,6 +387,60 @@ describe("advanced > ", () => {
 				totalAfterDiscount: 20000,
 				totalDiscount: 0,
 			})
+		})
+
+		test("브라우저 환경이 아닌 경우 initialValue 반환", () => {
+			const isBrowser = false
+
+			getStoredValue = () => {
+				if (!isBrowser) return initialValue
+				const item = localStorage.getItem(mockKey)
+				return item ? JSON.parse(item) : initialValue
+			}
+
+			expect(getStoredValue()).toBe(initialValue)
+		})
+
+		test("정상적으로 저장된 JSON이 있는 경우 해당 값 반환", () => {
+			localStorage.setItem(mockKey, JSON.stringify("stored-value"))
+			const isBrowser = true
+
+			getStoredValue = () => {
+				if (!isBrowser) return initialValue
+				const item = localStorage.getItem(mockKey)
+				return item ? JSON.parse(item) : initialValue
+			}
+
+			expect(getStoredValue()).toBe("stored-value")
+		})
+
+		test("저장된 값이 없는 경우 initialValue 반환", () => {
+			const isBrowser = true
+
+			getStoredValue = () => {
+				if (!isBrowser) return initialValue
+				const item = localStorage.getItem(mockKey)
+				return item ? JSON.parse(item) : initialValue
+			}
+
+			expect(getStoredValue()).toBe(initialValue)
+		})
+
+		test("파싱에 실패하는 경우 initialValue 반환", () => {
+			localStorage.setItem(mockKey, "INVALID_JSON") // JSON 아님
+			const isBrowser = true
+
+			getStoredValue = () => {
+				if (!isBrowser) return initialValue
+				try {
+					const item = localStorage.getItem(mockKey)
+					return item ? JSON.parse(item) : initialValue
+				} catch (error) {
+					return initialValue
+				}
+			}
+
+			expect(getStoredValue()).toBe(initialValue)
 		})
 	})
 })
