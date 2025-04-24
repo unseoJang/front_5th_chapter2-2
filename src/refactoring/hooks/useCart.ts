@@ -8,10 +8,14 @@ import {
 	findCartItem,
 	increaseCartItemQuantity,
 } from "../utils/cartItem";
+import { useLocalStorage } from "./useLocalStorage";
 
-export const useCart = (p0?: { id: string; name: string; price: number; stock: number; discounts: never[]; }[], p1?: never[]) => {
+export const useCart = (products: Product[], coupons: Coupon[]) => {
 	const [cart, setCart] = useState<CartItem[]>([]);
 	const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
+
+	// const [cart, setCart] = useLocalStorage<CartItem[]>("cart", []);
+	// const [selectedCoupon, setSelectedCoupon] = useState<Coupon | null>(null);
 
 	/**
 	 * 장바구니에 상품 추가 로직
@@ -22,7 +26,7 @@ export const useCart = (p0?: { id: string; name: string; price: number; stock: n
 		const remainingStock = getRemainingStock(product, cart);
 		if (remainingStock <= 0) return;
 
-		setCart((prevCart) => {
+		setCart((prevCart: CartItem[]) => {
 			const existingItem = findCartItem(prevCart, product.id);
 			if (existingItem) {
 				return increaseCartItemQuantity(prevCart, product.id, 1);
@@ -36,8 +40,10 @@ export const useCart = (p0?: { id: string; name: string; price: number; stock: n
 	 * @param productId
 	 */
 	const removeFromCart = (productId: string) => {
-		setCart((prevCart) =>
-			prevCart.filter((item) => item.product.id !== productId)
+		setCart((prevCart: CartItem[]) =>
+			prevCart.filter(
+				(item: { product: { id: string } }) => item.product.id !== productId
+			)
 		);
 	};
 
@@ -47,7 +53,7 @@ export const useCart = (p0?: { id: string; name: string; price: number; stock: n
 	 * @param newQuantity
 	 */
 	const updateQuantity = (productId: string, newQuantity: number) => {
-		setCart((prevCart) =>
+		setCart((prevCart: CartItem[]) =>
 			updateCartItemQuantity(prevCart, productId, newQuantity)
 		);
 	};
