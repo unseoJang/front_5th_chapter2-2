@@ -26,7 +26,7 @@ export const useCart = () => {
 		setCart((prevCart: CartItem[]) => {
 			const existingItem = findCartItem(prevCart, product.id)
 			if (existingItem) {
-				return increaseCartItemQuantity(prevCart, product.id, 1)
+				return increaseCartItemQuantity(prevCart, product.id)
 			}
 			return createNewCartItem(prevCart, product)
 		})

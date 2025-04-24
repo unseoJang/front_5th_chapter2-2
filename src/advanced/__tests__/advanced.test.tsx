@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { beforeEach, describe, expect, test } from "vitest"
 import {
 	act,
@@ -60,22 +59,22 @@ const mockCoupons: Coupon[] = [
 ]
 
 const TestAdminPage = () => {
-	const [products, setProducts] = useState<Product[]>(mockProducts)
-	const [coupons, setCoupons] = useState<Coupon[]>(mockCoupons)
+	// const [products, setProducts] = useState<Product[]>(mockProducts)
+	// const [coupons, setCoupons] = useState<Coupon[]>(mockCoupons)
 
-	const handleProductUpdate = (updatedProduct: Product) => {
-		setProducts((prevProducts) =>
-			prevProducts.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-		)
-	}
+	// const handleProductUpdate = (updatedProduct: Product) => {
+	// 	setProducts((prevProducts) =>
+	// 		prevProducts.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
+	// 	)
+	// }
 
-	const handleProductAdd = (newProduct: Product) => {
-		setProducts((prevProducts) => [...prevProducts, newProduct])
-	}
+	// const handleProductAdd = (newProduct: Product) => {
+	// 	setProducts((prevProducts) => [...prevProducts, newProduct])
+	// }
 
-	const handleCouponAdd = (newCoupon: Coupon) => {
-		setCoupons((prevCoupons) => [...prevCoupons, newCoupon])
-	}
+	// const handleCouponAdd = (newCoupon: Coupon) => {
+	// 	setCoupons((prevCoupons) => [...prevCoupons, newCoupon])
+	// }
 
 	return (
 		<ProductProvider initialProducts={mockProducts}>
@@ -324,13 +323,19 @@ describe("advanced > ", () => {
 		})
 
 		test("increaseCartItemQuantity - 재고 초과하지 않도록 수량을 증가시킨다.", () => {
-			const cart = [
+			const cart: CartItem[] = [
 				{
-					product: { id: "b", name: "B", price: 2000, stock: 5 },
+					product: {
+						id: "b",
+						name: "B",
+						price: 2000,
+						stock: 5,
+						discounts: [],
+					},
 					quantity: 3,
 				},
 			]
-			const result = increaseCartItemQuantity(cart, "b", 3)
+			const result = increaseCartItemQuantity(cart, "b")
 			expect(result[0].quantity).toBe(5)
 		})
 

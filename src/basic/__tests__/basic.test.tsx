@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { beforeEach, describe, expect, test } from "vitest"
 import {
 	act,
@@ -55,23 +54,6 @@ const mockCoupons: Coupon[] = [
 ]
 
 const TestAdminPage = () => {
-	const [products, setProducts] = useState<Product[]>(mockProducts)
-	const [coupons, setCoupons] = useState<Coupon[]>(mockCoupons)
-
-	const handleProductUpdate = (updatedProduct: Product) => {
-		setProducts((prevProducts) =>
-			prevProducts.map((p) => (p.id === updatedProduct.id ? updatedProduct : p))
-		)
-	}
-
-	const handleProductAdd = (newProduct: Product) => {
-		setProducts((prevProducts) => [...prevProducts, newProduct])
-	}
-
-	const handleCouponAdd = (newCoupon: Coupon) => {
-		setCoupons((prevCoupons) => [...prevCoupons, newCoupon])
-	}
-
 	return (
 		<ProductProvider initialProducts={mockProducts}>
 			<CouponProvider initialCoupons={mockCoupons}>

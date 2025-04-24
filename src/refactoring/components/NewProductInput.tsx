@@ -1,18 +1,12 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { Product } from "../../types";
-
-interface NewProduct {
-	name: string;
-	price: number;
-	stock: number;
-}
+import React, { Dispatch, SetStateAction } from "react"
+import { Product } from "../../types"
 
 interface NewProductInputProps {
-	label: string;
-	id: string;
-	value: number | string;
-	type: string;
-	setNewProduct: Dispatch<SetStateAction<Omit<Product, "id">>>;
+	label: string
+	id: string
+	value: number | string
+	type: string
+	setNewProduct: Dispatch<SetStateAction<Omit<Product, "id">>>
 }
 
 const NewProductInput: React.FC<NewProductInputProps> = ({
@@ -23,12 +17,12 @@ const NewProductInput: React.FC<NewProductInputProps> = ({
 	setNewProduct,
 }) => {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const { value } = e.target;
+		const { value } = e.target
 		setNewProduct((prev) => ({
 			...prev,
 			[id]: type === "number" ? Number(value) : value,
-		}));
-	};
+		}))
+	}
 
 	return (
 		<div className="mb-2">
@@ -43,7 +37,7 @@ const NewProductInput: React.FC<NewProductInputProps> = ({
 				className="w-full p-2 border rounded"
 			/>
 		</div>
-	);
-};
+	)
+}
 
-export default NewProductInput;
+export default NewProductInput
